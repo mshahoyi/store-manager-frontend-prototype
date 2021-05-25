@@ -1,0 +1,37 @@
+
+.ul {
+    padding-inline: 80px;
+    list-style-type: none;
+    background-color: lightgray;
+    margin-block: 0;
+    padding-block: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.li {
+    display: inline;
+}
+
+.a {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #2d2d2d;
+    transition: all 200ms;
+}
+
+.a:hover {
+    background-color: darkcyan;
+}
+
+.routes {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;;
+}
+
+.active {
+    background-color: cadetblue;
+}

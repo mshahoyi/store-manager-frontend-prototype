@@ -1,6 +1,8 @@
 import { ApiPaginatedData } from "../types/sharedTypes";
 import axios from "axios";
 
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+
 export default class BaseApi<Model> {
   resource: String;
 
@@ -41,7 +43,7 @@ export default class BaseApi<Model> {
   post<U>(data: U): Promise<Model> {
     const formData = this.convertToFormData(data as Record<string, unknown>);
     return axios
-      .post(this.url, data)
+      .post(this.url, formData)
       .then((response) => response.data)
       .catch((err) => {
         throw err.data;

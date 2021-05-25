@@ -1,0 +1,9 @@
+.headerCell {
+    border: 1px solid black;
+    padding-inline-end: 48px;
+}
+
+.headerRow {
+    background-color: lightgray;
+}
+
