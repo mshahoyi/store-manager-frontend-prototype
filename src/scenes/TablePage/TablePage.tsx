@@ -9,7 +9,10 @@ import { Category } from "../../types/categoryTypes";
 import { Product } from "../../types/productTypes";
 import PaginationTable from "../../components/PaginationTable";
 import { Button } from "../../components/Button";
-import { useHistory, useLocation, Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { categoryApi } from "../../api/categoryApi";
+import { productApi } from "../../api/productApi";
+import axios from "axios";
 
 export default function TablePage({ model }: { model: Model }) {
   const history = useHistory();
@@ -19,32 +22,77 @@ export default function TablePage({ model }: { model: Model }) {
   const [fetchError, setError] = useState(null as null | string);
 
   useEffect(() => {
-    fetchData();
+    fetchData(modelDataTable[model]);
   }, [model]);
 
-  const fetchData = () => {
+  const fetchData = (fetcher: () => Promise<ApiPaginatedData<unknown>>) => {
     setLoading(true);
-    modelDataTable[model]()
+    fetcher()
       .then((data) => {
-        setData(data);
+        setData(data as ApiPaginatedData<Category & Product>);
         setError(null);
       })
-      .catch((e) => setError(e.toString))
+      .catch((e) => {
+        setError(e.toString());
+      })
       .finally(() => setLoading(false));
+  };
+
+  const handleDelete = async (item: Category | Product) => {
+    setLoading(true);
+    setError(null);
+    try {
+      if (model === Model.category) await categoryApi.delete(item.id);
+      else await productApi.delete(item.id);
+      fetchData(modelDataTable[model]);
+    } catch (e) {
+      setError(e.toString());
+      setLoading(false);
+    }
+  };
+
+  const handlePageChange = (href?: string | null) => {
+    if (href) {
+      fetchData(() => axios.get(href).then((r) => r.data));
+    }
   };
 
   return (
     <>
-      <Link to={`${location.pathname}/${model}-upsert`}>
-        <Button primary>Add</Button>
-      </Link>
+      <div style={{ textAlign: "end" }}>
+        <Link to={`${location.pathname}/${model}-upsert`}>
+          <Button primary>Add</Button>
+        </Link>
+      </div>
 
-      {fetchError && <h5>{fetchError}</h5>}
       <PaginationTable
         headers={modelDatatableHeaders[model]}
-        data={[]}
+        data={data}
         loading={loading}
+        requestPage={handlePageChange}
+        actions={(item) => {
+          const modelItem = item as Category | Product;
+
+          return (
+            <div>
+              <Button
+                primary
+                onClick={() =>
+                  history.push(
+                    `${location.pathname}/${model}-upsert/${modelItem.id}`
+                  )
+                }
+              >
+                Edit
+              </Button>
+              <Button secondary onClick={() => handleDelete(modelItem)}>
+                Delete
+              </Button>
+            </div>
+          );
+        }}
       />
+      {fetchError && <h5>{fetchError}</h5>}
     </>
   );
 }

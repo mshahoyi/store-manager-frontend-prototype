@@ -33,7 +33,7 @@ const StoreUpsert = ({ values, setValues, ...rest }: FormikProps<Store>) => {
             name="name"
             onChange={(e) => setValues({ ...values, name: e.target.value })}
             onBlur={rest.handleBlur}
-            value={values.name || store.name}
+            value={values.name === undefined ? store.name || "" : values.name}
           />
           {rest.errors.name && rest.touched.name && rest.errors.name}
         </div>

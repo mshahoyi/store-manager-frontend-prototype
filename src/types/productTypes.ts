@@ -1,5 +1,6 @@
 import { Category } from "./categoryTypes";
 import { TimeMetadata } from "./sharedTypes";
+import { Store } from "./storeTypes";
 
 export interface Product extends TimeMetadata {
   id: number;
@@ -8,4 +9,6 @@ export interface Product extends TimeMetadata {
   price: number;
   categoryId: number;
   category: Category;
+  storeId: number;
+  store: Store;
 }

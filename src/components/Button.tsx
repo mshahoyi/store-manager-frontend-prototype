@@ -5,6 +5,12 @@ export const Button = styled.button<ButtonProps>`
   background: cornflowerblue;
   color: white;
 
+  ${(props) =>
+    props.disabled &&
+    css`
+      opacity: 0.38;
+    `}
+
   margin: 4px;
   padding: 12px 24px;
   border-radius: 3px;
