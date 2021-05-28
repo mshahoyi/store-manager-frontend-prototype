@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 
 const StoreUpsert = ({ values, setValues, ...rest }: FormikProps<Store>) => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [store, setStore] = useState({} as Store);
   const { id } = useParams<{ id?: string }>();
   const storeId = Number(id);
@@ -20,6 +21,7 @@ const StoreUpsert = ({ values, setValues, ...rest }: FormikProps<Store>) => {
           setStore(store);
           setValues({ id: store.id } as Store);
         })
+        .catch((e) => setError(e.toString()))
         .finally(() => setLoading(false));
     }
   }, []);
@@ -64,6 +66,8 @@ const StoreUpsert = ({ values, setValues, ...rest }: FormikProps<Store>) => {
         </button>
       </form>
       {rest.isSubmitting && <h3>Submitting...</h3>}
+
+      {error && <h3>{error}</h3>}
     </div>
   );
 };

@@ -16,6 +16,7 @@ function UpsertPage({
   const history = useHistory();
   const { id } = useParams<{ id?: string }>();
   const [loading, setLoading] = useState(false);
+  // items is an object mapping the fields name to the array of drop down options
   const [items, setItems] = useState(
     {} as Record<string, Record<string, unknown>[]>
   );
@@ -40,11 +41,16 @@ function UpsertPage({
       fields
         // obly pointer fields need item fetching
         .filter((f) => typeof f.items === "function")
-        .map((field) =>
-          field.items!().then((array) =>
-            setItems({ ...items, [field.name]: array })
-          )
-        )
+        .map((field) => {
+          // here we should return the fetcher for items, but it should be modified to add
+          // the returned array to items state
+          const modified = () =>
+            field.items!().then((array) => {
+              console.log("returned array", array, field.name);
+              setItems({ ...items, [field.name]: array });
+            });
+          return modified();
+        })
     );
   };
 
