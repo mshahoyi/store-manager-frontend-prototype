@@ -1,7 +1,8 @@
 import { ApiPaginatedData } from "../types/sharedTypes";
 import axios from "axios";
 
-axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+axios.defaults.baseURL =
+  process.env.REACT_APP_BASE_URL || "https://store-prototype.herokuapp.com";
 
 export default class BaseApi<Model extends unknown> {
   resource: String;

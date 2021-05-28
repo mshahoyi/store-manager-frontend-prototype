@@ -10,23 +10,29 @@ import styles from "./Stores.module.css";
 export default function Stores() {
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("" as string);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = () => {
+    setError("");
+    setLoading(true);
     storeApi
       .list()
       .then((stores) => setStores(stores))
+      .catch((e) => setError(e.toString()))
       .finally(() => setLoading(false));
   };
 
   const deleteStore = (id: number) => {
     setLoading(true);
+    setError("");
     storeApi
       .delete(id)
       .then(() => fetchData())
+      .catch((e) => setError(e.toString()))
       .finally(() => setLoading(false));
   };
 
@@ -49,6 +55,7 @@ export default function Stores() {
           />
         ))}
       </div>
+      <h3>{error}</h3>
     </Container>
   );
 }
