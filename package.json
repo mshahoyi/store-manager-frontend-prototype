@@ -2,7 +2,7 @@
   "name": "store-manager-frontend-prototype",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://muyabb.github.io/store-manager-frontend-prototype",
+  "homepage": "https://muyabb.github.io/store-manager-frontend-prototype",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
